@@ -1,5 +1,6 @@
 package com.krakedev.veterinaria.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,8 +22,11 @@ public class MascotaController {
     public List<Mascota> mascotas= new ArrayList<>();
 
     public MascotaController(){
-        mascotas.add(new Mascota(1, "n1", "e1", 1, "nd1"));
-        mascotas.add(new Mascota(2,"m2","e2",2,"nd2"));
+        mascotas.add(new Mascota(1L, "n1", "e1", 1, "nd1", LocalDate.of(2026, 1, 10)));
+        mascotas.add(new Mascota(2L, "m2", "e2", 2, "nd2", LocalDate.of(2026, 2, 15)));
+        mascotas.add(new Mascota(3L, "m3", "e3", 3, "nd3", LocalDate.of(2026, 3, 20)));
+        mascotas.add(new Mascota(4L, "m4", "e4", 4, "nd4", LocalDate.of(2026, 4, 25)));
+        mascotas.add(new Mascota(5L, "m5", "e5", 5, "nd5", LocalDate.of(2026, 5, 30)));
     }
 
     @GetMapping
@@ -31,9 +35,9 @@ public class MascotaController {
     }
 
     @GetMapping("/{id}")
-    public Mascota obtenerMascotaId(@PathVariable int id){
+    public Mascota obtenerMascotaId(@PathVariable Long id){
         Optional<Mascota> mascota = mascotas.stream()
-        .filter(m -> m.getId() == id).findAny();
+        .filter(m -> m.getId().equals(id)).findAny();
         return mascota.orElse(null);
     }
 
@@ -44,8 +48,8 @@ public class MascotaController {
     }
 
     @DeleteMapping("/{id}")
-    public void eliminarMascota(@PathVariable int id){
-        mascotas.removeIf(m -> m.getId() == id);
+    public void eliminarMascota(@PathVariable Long id){
+        mascotas.removeIf(m -> m.getId().equals(id));
     }
 
 }
