@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.krakedev.veterinaria.entity.EstadoMascota;
 import com.krakedev.veterinaria.entity.Mascota;
 import com.krakedev.veterinaria.service.MascotaService;
 
@@ -70,5 +71,21 @@ public class MascotaController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+    @PutMapping("/estado/{id}")
+    public ResponseEntity<?> cambiarEstadoMascota(@PathVariable Long id, @RequestBody EstadoMascota estado){
+        try {
+            Mascota mascota = mascotaService.cambiarEstadoMascota(id, estado);
+            return ResponseEntity.ok(mascota);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/estado/{estado}")
+    public ResponseEntity<List<Mascota>> listarMascotasPorEstado(@PathVariable EstadoMascota estado){
+        List<Mascota> mascotas = mascotaService.obtenerPorEstado(estado);
+        return ResponseEntity.ok(mascotas);
     }
 }

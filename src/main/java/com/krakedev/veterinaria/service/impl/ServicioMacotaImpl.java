@@ -5,11 +5,13 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.krakedev.veterinaria.entity.EstadoMascota;
 import com.krakedev.veterinaria.entity.Mascota;
 import com.krakedev.veterinaria.repository.MascotaRepository;
 import com.krakedev.veterinaria.service.MascotaService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 
 @Service
 @RequiredArgsConstructor
@@ -54,5 +56,19 @@ public class ServicioMacotaImpl implements MascotaService {
     @Override
     public void eliminarMascota(Long id) {
         mascotaRepository.deleteById(id);
+    }
+
+    @Override
+    @SneakyThrows
+    public Mascota cambiarEstadoMascota(Long id, EstadoMascota nuevoEstado) {
+        Mascota mascotaExistente = mascotaRepository.findById(id)
+                .orElseThrow(() -> new Exception("Mascota con ID " + id + " no encontrada"));
+        mascotaExistente.setEstado(nuevoEstado);
+        return mascotaRepository.save(mascotaExistente);
+    }
+
+    @Override
+    public List<Mascota> obtenerPorEstado(EstadoMascota estado) {
+        return mascotaRepository.findByEstado(estado);
     }
 }
