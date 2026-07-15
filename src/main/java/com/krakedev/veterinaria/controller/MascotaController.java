@@ -52,18 +52,23 @@ public class MascotaController {
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Mascota no encontrada");
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Mascota> actualizarMascota(@PathVariable Long id, @RequestBody Mascota mascota){
-        Mascota actualizada = mascotaService.actualizarMascota(id, mascota);
-        if (actualizada == null) {
-            return ResponseEntity.notFound().build();
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<?> actualizarMascota(@PathVariable Long id, @RequestBody Mascota mascota){
+        try {
+            Mascota mascotaActualizada = mascotaService.actualizarMascota(id, mascota);
+            return ResponseEntity.ok(mascotaActualizada);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-        return ResponseEntity.ok(actualizada);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarMascota(@PathVariable Long id){
-        mascotaService.eliminarMascota(id);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<?> eliminarMascota(@PathVariable Long id){
+        try {
+            mascotaService.eliminarMascota(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }
